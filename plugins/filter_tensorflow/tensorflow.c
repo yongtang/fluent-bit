@@ -269,8 +269,11 @@ static int cb_tf_filter(const void *data, size_t bytes,
     while (msgpack_unpack_next(&result, data, bytes, &off) == MSGPACK_UNPACK_SUCCESS) {
         root = result.data;
 
-        /* TODO check if msgpack type is map */
         map = root.via.array.ptr[1];
+        if (map.type !=  MSGPACK_OBJECT_MAP) {
+            flb_warn("[tensorflow] message type (%d) is not currently supported!", map.type);
+            continue;
+        }
         map_size = map.via.map.size;
 
         /* get timestamp from msgpack record */
