@@ -205,6 +205,7 @@ REGISTER_OUT_PLUGIN("out_cloudwatch_logs")
 REGISTER_OUT_PLUGIN("out_kinesis_firehose")
 REGISTER_OUT_PLUGIN("out_kinesis_streams")
 REGISTER_OUT_PLUGIN("out_s3")
+REGISTER_OUT_PLUGIN("out_metrics")
 
 # FILTERS
 # =======
