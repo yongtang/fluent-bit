@@ -90,6 +90,7 @@ int flb_io_net_connect(struct flb_upstream_conn *u_conn,
         return -1;
     }
 
+#ifdef FLB_HAVE_TLS
     if (u->proxied_host) {
         ret = flb_http_client_proxy_connect(u_conn);
         if (ret == -1) {
@@ -102,7 +103,6 @@ int flb_io_net_connect(struct flb_upstream_conn *u_conn,
                   u_conn->fd, u->tcp_host, u->tcp_port);
     }
 
-#ifdef FLB_HAVE_TLS
     /* Check if TLS was enabled, if so perform the handshake */
     if (u->flags & FLB_IO_TLS) {
         ret = flb_tls_session_create(u->tls, u_conn, coro);
@@ -348,7 +348,7 @@ int flb_io_net_write(struct flb_upstream_conn *u_conn, const void *data,
 
     flb_trace("[io coro=%p] [net_write] trying %zd bytes", coro, len);
 
-    if (!u_conn->tls_session) {
+    /*if (!u_conn->tls_session)*/ {
         if (u->flags & FLB_IO_ASYNC) {
             ret = net_io_write_async(coro, u_conn, data, len, out_len);
         }
@@ -386,7 +386,7 @@ ssize_t flb_io_net_read(struct flb_upstream_conn *u_conn, void *buf, size_t len)
 
     flb_trace("[io coro=%p] [net_read] try up to %zd bytes", coro, len);
 
-    if (!u_conn->tls_session) {
+    /*if (!u_conn->tls_session)*/ {
         if (u->flags & FLB_IO_ASYNC) {
             ret = net_io_read_async(coro, u_conn, buf, len);
         }
